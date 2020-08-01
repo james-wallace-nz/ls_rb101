@@ -24,6 +24,8 @@
 # print monthly_payment
 # format results
 
+MONTHS_IN_YEAR = 12
+
 puts 'Welcome to Loan Calculator!'
 
 def prompt(message)
@@ -36,9 +38,9 @@ def request_input(message, type)
     prompt(message)
     input = gets.chomp
     valid = case type
-            when 'float' then valid_float?(input)
+            when 'float' then valid_currency?(input)
             when 'percent' then valid_percent?(input)
-            when 'integer' then valid_integer?(input)
+            when 'integer' then valid_months?(input)
             end
     valid ? break : puts("Invalid number")
   end
@@ -50,16 +52,28 @@ def request_input(message, type)
   end
 end
 
-def valid_float?(input)
-  /^\d*\.?\d*$/.match(input) && input > 0
-end
-
-def valid_integer?(input)
-  /^\d+$/.match(input) && input > 0
+def valid_currency?(input)
+  /^\d*\.?\d*$/.match(input) && input.to_f > 0
 end
 
 def valid_percent?(input)
-  /^\d*\.?\d*$/.match(input) && input > 0
+  /^\d*\.?\d*$/.match(input) && input.to_f > 0
+end
+
+def valid_months?(input)
+  /^\d+$/.match(input) && input.to_i > 0
+end
+
+def format_currency(input)
+  sprintf("$%0.2f", input)
+end
+
+def format_percent(input)
+  sprintf("%#0.2f%%", input)
+end
+
+def format_months(input)
+  sprintf("%d", input)
 end
 
 loan_amount = request_input('What is your loan amount? (positive value)', 'float')
@@ -68,8 +82,10 @@ loan_apr = request_input('What is the Annual Percentage Rate "APR" (%)?', 'perce
 
 loan_term_months = request_input('What is the loan term (months)?', 'integer')
 
-loan_monthly_rate = (1 + loan_apr)**(1.0 / 12) - 1
+# loan_monthly_rate = (1 + loan_apr)**(1.0 / 12) - 1
+
+loan_monthly_rate = loan_apr / MONTHS_IN_YEAR
 
 monthly_payment = loan_amount * (loan_monthly_rate / (1 - (1 + loan_monthly_rate)**(-loan_term_months)))
 
-prompt("with a loan amount of #{loan_amount}, an APR of #{loan_apr * 100}%, and a loan duration of #{loan_term_months} months, your monthly payment will be: #{monthly_payment}")
+prompt("with a loan amount of #{format_currency(loan_amount)}, an APR of #{format_percent(loan_apr * 100)}, and a loan duration of #{format_months(loan_term_months)} months, your monthly payment will be: #{format_currency(monthly_payment)}")
