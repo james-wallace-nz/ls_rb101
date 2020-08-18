@@ -340,10 +340,30 @@ p original_array
 
 # Given the following data structure use a combination of methods, including either the select or reject method, to return a new array identical in structure to the original but containing only the integers that are multiples of 3.
 
-arr = [[2], [3, 5, 7], [9], [11, 13, 15]]
+arr = [
+        [2],
+        [3, 5, 7],
+        [9],
+        [11, 13, 15]
+      ]
 
+# 1. iterate through array
+# 2. iterate through sub-arrays
+# 3. select elements that are multiples of 3
 
-# ::HERE::
+multiples = arr.map do |sub_array|
+  sub_array.select do |element|
+    element % 3 == 0
+  end
+end
+p multiples
+
+multiples2 = arr.map do |sub_array|
+  sub_array.reject do |element|
+    element % 3 != 0
+  end
+end
+p multiples2
 
 
 
@@ -351,8 +371,31 @@ arr = [[2], [3, 5, 7], [9], [11, 13, 15]]
 
 # Given the following data structure, and without using the Array#to_h method, write some code that will return a hash where the key is the first item in each sub array and the value is the second item.
 
-arr = [[:a, 1], ['b', 'two'], ['sea', {c: 3}], [{a: 1, b: 2, c: 3, d: 4}, 'D']]
+arr = [
+        [:a, 1],
+        ['b', 'two'],
+        ['sea', {c: 3}],
+        [{a: 1, b: 2, c: 3, d: 4}, 'D']
+      ]
+
 # expected return value: {:a=>1, "b"=>"two", "sea"=>{:c=>3}, {:a=>1, :b=>2, :c=>3, :d=>4}=>"D"}
+
+# return hash
+# key is first item in each sub-array
+# value is second item
+
+hash = arr.each_with_object({}) do |element, hash|
+  hash[element[0]] = element[1]
+end
+p hash
+
+# or
+
+hash2 = {}
+arr.each do |element|
+  hash2[element[0]] = element[1]
+end
+p hash2
 
 
 
@@ -360,11 +403,48 @@ arr = [[:a, 1], ['b', 'two'], ['sea', {c: 3}], [{a: 1, b: 2, c: 3, d: 4}, 'D']]
 
 # Given the following data structure, return a new array containing the same sub-arrays as the original but ordered logically by only taking into consideration the odd numbers they contain.
 
-arr = [[1, 6, 7], [1, 4, 9], [1, 8, 3]]
+arr = [
+        [1, 6, 7],
+        [1, 4, 9],
+        [1, 8, 3]
+      ]
 
 # The sorted array should look like this:
 
-[[1, 8, 3], [1, 6, 7], [1, 4, 9]]
+# [
+#   [1, 8, 3],
+#   [1, 6, 7],
+#   [1, 4, 9]
+# ]
+
+# tansform to
+# [
+#   [1, 3],
+#   [1, 7],
+#   [1, 9]
+# ]
+# based on elements being odd
+
+sorted_array = arr.sort do |a, b|
+  one = a.select do |element|
+    element.odd?
+  end
+  two = b.select do |element|
+    element.odd?
+  end
+  # p one
+  # p two
+  one <=> two
+end
+p sorted_array
+
+sorted_array2 = arr.sort_by do |sub_array|
+  sub_array.select do |element|
+    element.odd?
+  end
+end
+p sorted_array2
+
 
 
  # 14
@@ -381,14 +461,65 @@ hsh = {
 
 # The return value should look like this:
 
-[["Red", "Green"], "MEDIUM", ["Red", "Green"], ["Orange"], "LARGE"]
+# [["Red", "Green"], "MEDIUM", ["Red", "Green"], ["Orange"], "LARGE"]
+
+# return array
+# array contains fruit colors and vegetable sizes
+# colors should be capitalised, sizes should be uppercase
+# map will transform and return an array
+
+# 1. iterate through the hsh
+# 2. a) if :type is 'fruit' then pick :color
+# 2. b) capitalise color
+# 3. a) if :type is 'vegetable' then pick :size
+# 3. b) uppercase size
+
+array = hsh.map do |name, details|
+  if details[:type] == 'fruit'
+    details[:colors].map do |color|
+      color.capitalize
+    end
+  elsif details[:type] == 'vegetable'
+    details[:size].upcase
+  end
+end
+p array
+
 
 
  # 15
 
 # Given this data structure write some code to return an array which contains only the hashes where all the integers are even.
 
-arr = [{a: [1, 2, 3]}, {b: [2, 4, 6], c: [3, 6], d: [4]}, {e: [8], f: [6, 10]}]
+arr = [
+        { a: [1, 2, 3] },
+        { b: [2, 4, 6],
+          c: [3, 6],
+          d: [4]
+        },
+        { e: [8],
+          f: [6, 10]
+        }
+      ]
+
+# return array with some elements => selection => select
+
+# 1. iterate through array
+# 2. iterate through values
+# 3. iterate through elements
+
+
+
+new_array = arr.select do |hash|
+  hash.all? do |_key, value|
+    value.all? do |element|
+      element.even?
+    end
+  end
+end
+p new_array
+
+
 
  # 16
 
@@ -402,5 +533,27 @@ arr = [{a: [1, 2, 3]}, {b: [2, 4, 6], c: [3, 6], d: [4]}, {e: [8], f: [6, 10]}]
 
 # Write a method that returns one UUID when called with no parameters.
 
+# 1. generate random hexadecimal
+# 2. add to string until size is 8-4-4-4-12
+# 3. return string
 
 
+def rand_hexadecimal
+  hex = ('a'..'f').to_a + ('0'..'9').to_a
+  hex.sample
+end
+
+def create_uuid
+  array = []
+  sections = [8, 4, 4, 4, 12]
+  sections.each do |count|
+    string = ''
+    count.times do
+      string << rand_hexadecimal
+    end
+    array << string
+  end
+  array.join('-')
+end
+
+puts create_uuid
