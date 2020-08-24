@@ -47,20 +47,14 @@ def available_moves(brd)
 end
 
 def joinor(available, delimiter = ', ', last_join = 'or')
-  string = ''
   case available.size
-  when 1 then string = "#{available[0]}"
-  when 2 then string = "#{available[0]} #{last_join} #{available[1]}"
+  when 0 then ''
+  when 1 then available.first
+  when 2 then available.join(" #{last_join} ")
   else
-    available.each_with_index do |space, index|
-      if available.size - 1 == index
-        string << "#{last_join} #{space}"
-      else
-        string << "#{space}#{delimiter}"
-      end
-    end
+    available[-1] = "#{last_join} #{available.last}"
+    available.join(delimiter)
   end
-  string
 end
 
 def user_move(brd)
@@ -80,59 +74,28 @@ def valid_move?(brd, space)
 end
 
 def computer_move(brd)
-  threat = detect_threat(brd)
-  if threat
-    move = threat
-  else
-    move = available_moves(brd).sample
+  move = nil
+
+  WIN_CONDITIONS.each do |line|
+    move = find_third_empty_square(line, brd, COMPUTER_TOKEN)
+    break if move
   end
+
+  unless move
+    WIN_CONDITIONS.each do |line|
+      move = find_third_empty_square(line, brd, HUMAN_TOKEN)
+      break if move
+    end
+  end
+
+  move ||= available_moves(brd).sample
   update_board(brd, move, COMPUTER_TOKEN)
 end
 
-# inputs:
-# WIN_CONDITIONS = nested array
-# available_moves array
-
-# output:
-# defensive move space or nil
-
-# Examples:
-#      |     |
-#   X  |  X  |  O
-#      |     |
-# -----+-----+-----
-#      |     |
-#   X  |  O  |
-#      |     |
-# -----+-----+-----
-#      |     |
-#      |     |
-#      |     |
-
-# WIN_CONDITIONS = [
-#   [1, 2, 3], [4, 5, 6], [7, 8, 9],
-#   [1, 4, 7], [2, 5, 8], [3, 6, 9],
-#   [1, 5, 9], [3, 5, 7]
-# ]
-
-# threat = [1, 4, 7]
-# 1 => X, 4 => X, 7 => ' '
-# values_at = [X, X, ' ']
-
-# Algorithm:
-# if count HUMAN_TOKEN == 2 and count EMPTY_SQUARE = ' '
-# return key where value = EMPTY_SQUARE
-
-def detect_threat(brd)
-  WIN_CONDITIONS.each do |condition|
-    if brd.values_at(*condition).count(HUMAN_TOKEN) == 2 &&
-       brd.values_at(*condition).count(EMPTY_SQUARE) == 1
-       threat_index = brd.values_at(*condition).index(EMPTY_SQUARE)
-       threat_space = condition[threat_index]
-       return threat_space
-    end
+def find_third_empty_square(line, brd, token)
+  if brd.values_at(*line).count(token) == 2
+    brd.select { |k, v| line.include?(k) && v == EMPTY_SQUARE }.keys.first
   end
-  nil
 end
 
 def update_board(brd, space, token)
