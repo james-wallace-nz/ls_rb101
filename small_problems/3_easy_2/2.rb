@@ -13,7 +13,9 @@
 # The area of the room is 70.0 square meters (753.47 square feet).
 
 SQFEET_PER_SQMETER = 10.7639
-SQMETERS_PER_SQFEET = SQFEET_PER_SQMETER ** 0.5
+SQMETERS_PER_SQFEET = SQFEET_PER_SQMETER**0.5
+SQINCHES_PER_SQFEET = 144
+SQCM_PER_SQFEET = 929.03
 
 print 'What is the length of the room (meters)?: '
 length_meters = gets.chomp.to_f
@@ -39,9 +41,7 @@ width_feet = gets.chomp.to_f
 
 area_feet = (length_feet * width_feet).round(2)
 area_meters = (area_feet / SQFEET_PER_SQMETER).round(2)
+area_inches = (area_feet * SQINCHES_PER_SQFEET).round(2)
+area_cm = (area_feet * SQCM_PER_SQFEET).round(2)
 
-puts "The area of the room is #{area_feet} square feet (#{area_meters} square meters)."
-
-sq feet
-sq inches
-sq cm
+puts "The area of the room is #{area_feet} square feet (#{area_inches} square inches or #{area_cm} square centimeters)."
