@@ -2,13 +2,31 @@
 
 # You may assume that the number passed in is an integer greater than 1.
 
-def multisum(int)
+# input: integer
+# output: integer - sum of multiples of 3 or 5
 
+# algorithm:
+# interate from 1 to number
+# if multiple of 3 or 5 add to array
+# summ all elements in array
+# return sum
+
+def multiples(int)
+  multiples = []
+  1.upto(int) do |number|
+    multiples << number if (number % 3).zero? || (number % 5).zero?
+  end
+  multiples
+end
+
+def multisum(int)
+  multiples = multiples(int)
+  multiples.reduce(:+)
 end
 
 # Examples
 
-puts multisum(3) == 3
-puts multisum(5) == 8
-puts multisum(10) == 33
-puts multisum(1000) == 234168
+p multisum(3) == 3
+p multisum(5) == 8
+p multisum(10) == 33
+p multisum(1000) == 234168
