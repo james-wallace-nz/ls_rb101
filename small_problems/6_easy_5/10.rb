@@ -36,3 +36,34 @@ puts print_in_box('')
 puts '-----'
 
 # Modify this method so it will truncate the message if it will be too wide to fit inside a standard terminal window (80 columns, including the sides of the box). For a real challenge, try word wrapping very long messages so they appear on multiple lines, but still within a box.
+
+def print_in_box(string)
+  width = (string.size + 2) > 78 ? 78 : (string.size + 2)
+  truncated_one = if string.size > 76
+                    string[0...76]
+                  else
+                    string
+                  end
+  truncated_two = if string.size > 76
+                    string[76..-1]
+                  else
+                    ''
+                  end
+
+  horizontal_rule = "+#{'-' * width}+"
+  empty_line = "|#{' ' * width}|"
+
+  puts horizontal_rule
+  puts empty_line
+  if string.size > 78
+    puts "| #{truncated_one} |"
+    puts "| #{truncated_two.ljust(76, ' ')} |"
+  else
+    puts "| #{truncated_one} |"
+  end
+  puts empty_line
+  puts horizontal_rule
+end
+
+print_in_box('To boldly go where no one has gone before. To boldly go where no one has gone before.')
+print_in_box('')

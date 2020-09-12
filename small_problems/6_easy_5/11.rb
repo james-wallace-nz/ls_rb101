@@ -6,5 +6,18 @@ def spin_me(str)
   end.join(" ")
 end
 
-spin_me("hello world") # "olleh dlrow"
+puts spin_me("hello world") # "olleh dlrow"
 
+a = "hello world"
+puts a.object_id
+
+puts spin_me(a)
+puts a
+
+puts spin_me(a).object_id
+
+
+# No, the split method creates an array with new string elements for each word in the original string.
+# reverse! mutates those string elements, but not the words within the original string
+# the spin_me method joins the array elements back into one new string, which is returned.
+# The original string is not modified and the string returned is a different object to the object passed into the method
