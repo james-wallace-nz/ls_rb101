@@ -27,7 +27,7 @@
 # That said, this exercise is a lead-in for the next two exercises. It verges on the Advanced level, so don't worry or get discouraged if you can't do it on your own. Recursion is tricky, and even experienced developers can have trouble dealing with it.
 
 def fibonacci(nth)
-
+  nth <= 2 ? 1 : fibonacci(nth - 1) + fibonacci(nth - 2)
 end
 
 # Examples:
