@@ -24,14 +24,17 @@ def guess_number(max_number, max_attempts)
 
     if guess == winning_number
       puts 'Yes! You win.'
+      break
     else
       puts 'Nope. Too small.' if guess < winning_number
       puts 'Nope. Too big.'   if guess > winning_number
 
       # Try again:
-      guess_number(max_number, max_attempts)
+      # guess_number(max_number, max_attempts)
     end
   end
 end
 
 guess_number(10, 3)
+
+# line 32 calls guess_number again with the same parameters, which will start from line 10 again rather than looping.

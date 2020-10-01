@@ -25,7 +25,7 @@ def idf(term, documents)
   number_of_documents = documents.length
   number_of_documents_with_term = documents.count { |d| tf(term, d) > 0 }
 
-  Math.log(number_of_documents / number_of_documents_with_term)
+  Math.log(number_of_documents / number_of_documents_with_term.to_f)
 end
 
 # Very simple example
@@ -46,7 +46,7 @@ document3 = "One of the core values that sets Launch School apart from some othe
 "such as a systematic problem-solving approach or learning how to deconstruct a programming language or building sound mental representations of how web application work. Everything we're trying to do at " +
 "Launch School is with an eye towards sustainable studying habits and building skills for a long-term career."
 
-documents = [document1, document2, document3]
+documents = [document2, document3] # [document1,
 
 # The higher the tf-idf score of a term for a document, the more informative
 # it is for that document.
@@ -70,3 +70,9 @@ puts tfidf("mastery", document3, documents) # ~ 3.3
 puts tfidf("some", document1, documents) # 0
 puts tfidf("some", document2, documents) # ~ 0.4
 puts tfidf("some", document3, documents) # ~ 0.4
+
+puts '---'
+
+# There's still one issue that could get us into trouble when performing division. If you don't see it immediately, remove document1 from the documents collection and check the TF-IDF value of 'quantum' again.
+
+# Cannot divide by zero. Log(0) is infinity.
