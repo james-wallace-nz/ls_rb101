@@ -3,7 +3,7 @@
 def my_method(array)
   if array.empty?
     []
-  elsif
+  elsif array.size > 1
     array.map do |value|
       value * value
     end

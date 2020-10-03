@@ -4,6 +4,10 @@
 
 # Modify your transpose method from the previous exercise so it works with any matrix with at least 1 row and 1 column.
 
+def transpose(matrix)
+
+end
+
 # Examples:
 
 transpose([[1, 2, 3, 4]]) == [[1], [2], [3], [4]]

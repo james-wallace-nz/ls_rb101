@@ -25,6 +25,62 @@
 
 # Take care not to modify the original matrix: you must produce a new matrix and leave the original matrix unchanged.
 
+# input: nested array
+# output: transposed array
+
+# [
+#   [0, 1, 2],
+#   [3, 4, 5],
+#   [6, 7, 8]
+# ]
+
+# [
+#   [0, 3, 6],
+#   [1, 4, 7],
+#   [2, 5, 8]
+# ]
+
+# 0, 0
+# 1, 0
+# 2, 0
+
+#     # 0, 1
+# 1, 1
+# 2, 1
+
+#     # 0, 2
+#     # 1, 2
+# 2, 2
+
+
+# algorithm:
+# loop columns: 0 - 2
+# loop rows: 0 - 1
+
+def transpose(matrix)
+  size = matrix.size - 1
+  transposed = []
+  0.upto(size) do |column|
+    new_row = []
+    0.upto(size) do |row|
+      new_row << matrix[row][column]
+    end
+    transposed << new_row
+  end
+  transposed
+end
+
+# solution
+
+def transpose(matrix)
+  result = []
+  (0..2).each do |column|
+    new_row = (0..2).map { |row| matrix[row][column] }
+    result << new_row
+  end
+  result
+end
+
 # Examples
 
 matrix = [
@@ -33,9 +89,60 @@ matrix = [
   [3, 9, 6]
 ]
 
-new_matrix = transpose(matrix)
+# new_matrix = transpose(matrix)
 
-p new_matrix == [[1, 4, 3], [5, 7, 9], [8, 2, 6]]
-p matrix == [[1, 5, 8], [4, 7, 2], [3, 9, 6]]
+# p new_matrix == [[1, 4, 3], [5, 7, 9], [8, 2, 6]]
+# p matrix == [[1, 5, 8], [4, 7, 2], [3, 9, 6]]
 
 # This program should print "true" twice.
+
+# Write a transpose! method that transposes a matrix in place. The obvious solution is to reuse transpose from above, then copy the results back into the array specified by the argument. For this method, don't use this approach; write a method from scratch that does the in-place transpose.
+
+def transpose!(matrix)
+  size = matrix.size - 1
+
+  combinations = []
+  (0..size).each do |first|
+    (0..size).each do |second|
+      combinations << [first, second]
+    end
+  end
+  combinations.map!(&:sort).uniq!
+
+  combinations.each do |a, b|
+    row = matrix[a][b]
+    column = matrix[b][a]
+    matrix[b][a] = row
+    matrix[a][b] = column
+  end
+  matrix
+end
+
+# solution
+
+def transpose!(matrix)
+  size = matrix.size - 1
+  (0..size).each do |i|
+    i.upto(size).each do |j|
+      matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
+    end
+  end
+  matrix
+end
+
+# column_index = 0
+# row_index = 1
+
+# row = 4
+# column = 5
+
+matrix = [
+  [1, 5, 8],
+  [4, 7, 2],
+  [3, 9, 6]
+]
+
+new_matrix = transpose!(matrix)
+
+p new_matrix == [[1, 4, 3], [5, 7, 9], [8, 2, 6]]
+p matrix == new_matrix

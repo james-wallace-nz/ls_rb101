@@ -30,6 +30,10 @@
 
 # Write a method that takes an arbitrary matrix and rotates it 90 degrees clockwise as shown above.
 
+def rotate90(matrix)
+
+end
+
 # Examples
 
 matrix1 = [

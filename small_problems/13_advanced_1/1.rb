@@ -11,7 +11,6 @@
 # dog, who lazily licks his
 # tail and looks around.
 
-
 # Example text data
 
 # The %{adjective} brown %{noun} %{adverb}
@@ -26,3 +25,38 @@
 # verbs: jumps lifts bites licks
 # adverb: easily lazily noisily excitedly
 
+# input: file contaiing text with placeholder words
+# output: text with placeholder words replaced
+
+# problem:
+# 1. import text from file
+# 2. iterate through words and replace [replacement] words with sample from replacement data structure
+# 3. print resulting text
+
+# data structure:
+# hash for replacement words
+# array for import text sentences
+
+REPLACEMENT = {
+  adjective: ['quick', 'lazy', 'sleepy', 'ugly',],
+  noun: ['fox', 'dog', 'head', 'leg'],
+  verb: ['jumps', 'lifts', 'bites', 'licks'],
+  adverb: ['easily', 'lazily', 'noisily', 'excitedly']
+}
+
+text = []
+File.open('sample.txt', mode = 'r') do |file|
+  text = file.read
+  # file.read.each_line do |line|
+  #   text << line.strip
+  # end
+end
+
+# nested_words = text.map(&:split)
+
+REPLACEMENT.each do |placeholder, replacement_words|
+  replace = Regexp.new("%{#{placeholder}}")
+  text.gsub!(replace, "#{replacement_words.sample}")
+end
+
+puts text
