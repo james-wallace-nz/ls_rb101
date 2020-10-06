@@ -33,7 +33,7 @@
 # inputs: nested array matrix
 # ouput: matrix rotated 90 degrees clockwise
 
-# algorithim:
+# algorithm:
 # 1. set num_of_columns, num_of_rows, result = empty array
 # 2. loop 0 to num_of_columns exclusive
 # 3. loop 0 to num_of_rows exclusive
