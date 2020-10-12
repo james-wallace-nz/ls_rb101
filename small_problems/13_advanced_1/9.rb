@@ -43,13 +43,13 @@ def egyptian(fraction)
 
   loop do
     largest_denominator = (denominator_remainder / numerator_remainder.to_f).ceil
-    largest_denominator += 1 if egyption_denominators.include?(largest_denominator) # error here - not always + 1
+    largest_denominator = egyption_denominators.last + 1 if egyption_denominators.include?(largest_denominator) # error here - not always + 1
     egyption_denominators << largest_denominator
 
     remainder = Rational(numerator_remainder * largest_denominator, denominator_remainder * largest_denominator) -
                 Rational(1 * denominator_remainder, largest_denominator * denominator_remainder)
 
-    break if egyption_denominators.reduce(0) { |memo, denom| memo + Rational(1, denom) } == fraction
+    break if unegyptian(egyption_denominators) == fraction
 
     numerator_remainder = remainder.numerator
     denominator_remainder = remainder.denominator
@@ -60,27 +60,43 @@ end
 # input: array of egyptian fractions
 # output: resulting rational number
 # algorithm:
+# iterate through each denominator in the array and sum
 
-# def unegyptian(egyption_fractions)
+def unegyptian(egyption_fractions)
+  egyption_fractions.reduce(0) { |memo, denom| memo + Rational(1, denom) }
+end
 
-# end
+# solution:
+
+def egyptian(target_value)
+  denominators = []
+  unit_denominator = 1
+  until target_value == 0
+    unit_fraction = Rational(1, unit_denominator)
+    if unit_fraction <= target_value
+      target_value -= unit_fraction
+      denominators << unit_denominator
+    end
+    unit_denominator += 1
+  end
+
+  denominators
+end
 
 # Examples:
 
 p egyptian(Rational(2, 1)) == [1, 2, 3, 6]
-
 p egyptian(Rational(137, 60)) == [1, 2, 3, 4, 5]
+p egyptian(Rational(3, 1)) == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 230, 57960]
 
-p egyptian(Rational(3, 1)) # == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 230, 57960]
-
-# unegyptian(egyptian(Rational(1, 2))) == Rational(1, 2)
-# unegyptian(egyptian(Rational(3, 4))) == Rational(3, 4)
-# unegyptian(egyptian(Rational(39, 20))) == Rational(39, 20)
-# unegyptian(egyptian(Rational(127, 130))) == Rational(127, 130)
-# unegyptian(egyptian(Rational(5, 7))) == Rational(5, 7)
-# unegyptian(egyptian(Rational(1, 1))) == Rational(1, 1)
-# unegyptian(egyptian(Rational(2, 1))) == Rational(2, 1)
-# unegyptian(egyptian(Rational(3, 1))) == Rational(3, 1)
+p unegyptian(egyptian(Rational(1, 2))) == Rational(1, 2)
+p unegyptian(egyptian(Rational(3, 4))) == Rational(3, 4)
+p unegyptian(egyptian(Rational(39, 20))) == Rational(39, 20)
+p unegyptian(egyptian(Rational(127, 130))) == Rational(127, 130)
+p unegyptian(egyptian(Rational(5, 7))) == Rational(5, 7)
+p unegyptian(egyptian(Rational(1, 1))) == Rational(1, 1)
+p unegyptian(egyptian(Rational(2, 1))) == Rational(2, 1)
+p unegyptian(egyptian(Rational(3, 1))) == Rational(3, 1)
 
 # Every rational number can be expressed as an Egyptian Fraction. In fact, every rational number can be expressed as an Egyptian Fraction in an infinite number of different ways. Thus, the first group of examples may not show the same values as your solution. They do, however, show the expected form of the solution. The remaining examples merely demonstrate that the output of egyptian can be reversed by unegyptian.
 
