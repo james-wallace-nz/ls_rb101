@@ -70,7 +70,7 @@
 
 # 3. Data Structures
 
-# Overall strucutre representing structure as a whole
+# Overall strucutre representing sequence as a whole
 # Individual rows within the overall structure
 # Individual rows in a set order in context of sequence
 # Individual rows contain integers
@@ -88,6 +88,13 @@
 
 # 4. Algorithms
 
+# 1. Create an empty 'rows' array to contain all of the sum_even_number_rows
+# 2. Create a 'row' array and add it to the overall 'rows' array
+# 3. Repeate step 2 until all the necessary rows have been created
+# 4. Sum the final row
+# 4. Return the sum
+
+
 # Sum even number rows method:
 # 1. create a sequence starting with 2 in a nested array structure
 # 2. locate the integer input row (last element) from the nested array returned by create_sequence method
@@ -95,16 +102,30 @@
 # 4. output the sum
 
 # Create a sequence method:
-# 1. create empty rows array
+# 1. create empty `rows` array
 # 2. add row array of consecutive integers using starting integer and row length
 # 3. repeat step 2 until number of rows equals integer input
 # 4. return nested array
 
+
+# Calculating the start integer:
+# Rule: first integer of row == last integer of preceding row + 2
+# Algorithm:
+# - get the preceding row (last row in rows array)
+# - get last integer of that row
+# - add 2 to the integer
+
+
 # Create row method:
-# 1. create empty row '[]' array
-# 2. add starting integer to row array
+# 1. create empty `row` '[]' array
+# 2. add starting integer to `row` array
 # 3. increment the integer by 2
 # 4. repeat steps 2 and 3 until number of elements in the row array equals row number
+      # - start the loop
+      #   - add the start integer to the row
+      #   - increment the start integer by 2
+      #   - break out of the loop if length of row equals row_length
+# 5. return the row
 
 
 
@@ -135,8 +156,12 @@ def create_row(starting_integer, row_length)
   row
 end
 
-puts sum_even_number_rows(1)
-puts sum_even_number_rows(2)
-puts sum_even_number_rows(3)
-puts sum_even_number_rows(4)
+puts sum_even_number_rows(1) == 2
+puts sum_even_number_rows(2) == 10
+puts sum_even_number_rows(3) == 30
+puts sum_even_number_rows(4) == 68
 puts sum_even_number_rows(100)
+
+p create_row(2, 1) == [2]
+p create_row(4, 2) == [4, 6]
+p create_row(8, 3) == [8, 10, 12]
