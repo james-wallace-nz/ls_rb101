@@ -5,3 +5,6 @@ integer.to_s.chars.map(&:to_i).reduce(:+)
 
 # imperative vs procedural vs declarative
 
+
+
+# Review - medium 1, question 7 further exploration
