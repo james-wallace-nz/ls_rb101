@@ -153,96 +153,76 @@ end
 arr = [['1', '8', '11'], ['2', '6', '13'], ['2', '12', '15'], ['1', '8', '9']]
 
 arr.sort
+# => [['1', '8', '11'],['1', '8', '9'],['2', '12', '15'],['2', '6', '13']]
 
 arr.sort_by do |sub_arr|
   sub_arr.map do |num|
     num.to_i
   end
 end
-
-
-
-# Line    Action                Object           Side Effect        Return Value            Return Value Used?
-# 1       L variable assignment Outer array      No                 Outer arrray
-# 1      `method call(`each`)   Outer array      No                 Calling array           Yes, assigned to `my_arr`.
-# 1 - 7   outer block execution Each sub-array   No                 Each sub-array          No
-# 2       method call (`each`)  Each sub-array   No                 Calling sub-array       Yes, determines outer block return value
-# 2 - 6   inner block execution Each element     No                 `nil`                   No
-# 3       method call (`>`)     Each element     No                 Boolean                 Yes, evaluated by `if` statement
-# 3       `if` stmt executed    Boolean          No                 `nil`                   Yes, determines inner block return value
-# 4       method call (`puts`)  Each element     Output string rep  `nil`                   Yes, determines inner block return value
+# => [['1', '8', '9'], ['1', '8', '11'],['2', '6', '13'], ['2', '12', '15']]
 
 
 # 8.
 
-# [[8, 13, 27], ['apple', 'banana', 'cantaloupe']].map do |arr|
-#   arr.select do |item|
-#     if item.to_s.to_i == item
-#       item > 13
-#     else
-#       item.size < 6
-#     end
-#   end
-# end
-
-# [ ]
-
-# Line    Action                Object           Side Effect        Return Value            Return Value Used?
-# 1       L variable assignment Outer array      No                 Outer arrray
-# 1      `method call(`each`)   Outer array      No                 Calling array           Yes, assigned to `my_arr`.
-# 1 - 7   outer block execution Each sub-array   No                 Each sub-array          No
-# 2       method call (`each`)  Each sub-array   No                 Calling sub-array       Yes, determines outer block return value
-# 2 - 6   inner block execution Each element     No                 `nil`                   No
-# 3       method call (`>`)     Each element     No                 Boolean                 Yes, evaluated by `if` statement
-# 3       `if` stmt executed    Boolean          No                 `nil`                   Yes, determines inner block return value
-# 4       method call (`puts`)  Each element     Output string rep  `nil`                   Yes, determines inner block return value
+[[8, 13, 27], ['apple', 'banana', 'cantaloupe']].map do |arr|
+  arr.select do |item|
+    if item.to_s.to_i == item
+      item > 13
+    else
+      item.size < 6
+    end
+  end
+end
+# => [[27], ['apple']]
 
 
 # 9.
 
-# [[[1], [2], [3], [4]], [['a'], ['b'], ['c']]].map do |element1|
-#   element1.each do |element2|
-#     element2.partition do |element3|
-#       element3.size > 0
-#     end
-#   end
-# end
+[
+  [ [1], [2], [3], [4] ],
+  [ ['a'], ['b'], ['c'] ]
+].map do |element1|
+  element1.each do |element2|
+    element2.partition do |element3|
+      element3.size > 0
+    end
+  end
+end
+# => [ [[1], [2], [3], [4]], [['a'], ['b'], ['c']] ]
 
-# [ ]
+# On line `1`, the `Array#map` method is called on the triple nested array. Each sub-array is passed to the block in turn and assigned to the local variable `element1`. `[[1], [2], [3], [4]]` and `[['a'], ['b'], ['c']]`
+# On line `2`, the `Array#each` method is called on the current sub-array. Each sub-sub-array element is passed to the block in turn and assigned to the local variable `element2`. `[1]`, `[2]`, `[3]`, `[4]`, ['a']`, `['b']`, `['c']`
+# On line `3`, the `Enumerabl#partition` method is called on the current sub-sub-array. Each integer or string element within the current sub-sub-array is passed to the block and assigned to the local variable `element3`.
+# On line `4`, the `Integer#size` or `String#size` method is called on the current integer or string value for `element3`. This returns an integer representing either the number of bytes in the machine representation of `int` or the number of characters in the string.
+# On line `4`, the `Comparable#>` method is called on the return value of `size`, with the integer `0` passed in as an argument. This returns boolean `true` for all elements as their byte size is greater than `0`.
+# As the last evaluated expression within the block, the return value of `>` method is the block return value.
 
-# Line    Action                Object           Side Effect        Return Value            Return Value Used?
-# 1       L variable assignment Outer array      No                 Outer arrray
-# 1      `method call(`each`)   Outer array      No                 Calling array           Yes, assigned to `my_arr`.
-# 1 - 7   outer block execution Each sub-array   No                 Each sub-array          No
-# 2       method call (`each`)  Each sub-array   No                 Calling sub-array       Yes, determines outer block return value
-# 2 - 6   inner block execution Each element     No                 `nil`                   No
-# 3       method call (`>`)     Each element     No                 Boolean                 Yes, evaluated by `if` statement
-# 3       `if` stmt executed    Boolean          No                 `nil`                   Yes, determines inner block return value
-# 4       method call (`puts`)  Each element     Output string rep  `nil`                   Yes, determines inner block return value
+# `partition` uses the block return value to return an array where the first element is an array of all elements in the caller that have a block return value that evaluates to `true`. The second element is an array of all elements in the caller that have a block return value that evaluates to `false`.
+# Therefore, `partition` returns the arrays [[1], []], [[2], []], [[3], []], [[4], []], [['a'], []], [['b'], [], [['c'], []]
+# These are the block return values for the `each` method. `each` does not use the block return value and returns the original calling sub-arrays
+# `map` uses the block return values for transformation and returns a new array containing the same sub-arrays as the original calling array
 
 
 # 10.
 
-# [[[1, 2], [3, 4]], [5, 6]].map do |arr|
-#   arr.map do |el|
-#     if el.to_s.size == 1
-#       el + 1
-#     else
-#       el.map do |n|
-#         n + 1
-#       end
-#     end
-#   end
-# end
+result =  [
+            [
+              [1, 2],
+              [3, 4]
+            ],
+            [5, 6]
+          ].map do |arr|
+            arr.map do |el|
+              if el.to_s.to_i == el
+                el + 1
+              else
+                el.map do |n|
+                  n + 1
+                end
+              end
+            end
+          end
+p result
+# => [[[2, 3], [4, 5]], [6, 7]]
 
-# [ ]
-
-# Line    Action                Object           Side Effect        Return Value            Return Value Used?
-# 1       L variable assignment Outer array      No                 Outer arrray
-# 1      `method call(`each`)   Outer array      No                 Calling array           Yes, assigned to `my_arr`.
-# 1 - 7   outer block execution Each sub-array   No                 Each sub-array          No
-# 2       method call (`each`)  Each sub-array   No                 Calling sub-array       Yes, determines outer block return value
-# 2 - 6   inner block execution Each element     No                 `nil`                   No
-# 3       method call (`>`)     Each element     No                 Boolean                 Yes, evaluated by `if` statement
-# 3       `if` stmt executed    Boolean          No                 `nil`                   Yes, determines inner block return value
-# 4       method call (`puts`)  Each element     Output string rep  `nil`                   Yes, determines inner block return value
