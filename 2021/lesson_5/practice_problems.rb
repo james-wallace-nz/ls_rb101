@@ -1,3 +1,5 @@
+puts '---1---'
+
 # 1. 
 
 # How would you order this array of number strings by descending numeric value?
@@ -23,6 +25,8 @@ end.reverse!
 p arr
 
 
+puts '---2---'
+
 # 2.
 
 # How would you order this array of hashes based on the year of publication of each book, from the earliest to the latest?
@@ -40,6 +44,8 @@ end)
 
 # Since all the values in question are four characters in length, in this case we can simply compare the strings without having to convert them to integers.
 
+
+puts '---3---'
 
 # 3.
 
@@ -64,6 +70,8 @@ puts hsh2[:third].keys[0]
 puts hsh2[:third].key(0)
 
 
+puts '---4---'
+
 # 4.
 
 # For each of these collection objects where the value 3 occurs, demonstrate how you would change this to 4.
@@ -86,6 +94,8 @@ hsh2[['a']][:a][2] = 4
 p hsh2
 
 
+puts '---5---'
+
 # 5.
 
 # Given this nested Hash:
@@ -100,11 +110,42 @@ munsters = {
 
 # figure out the total age of just the male members of the family.
 
+# input: hash
+# output: integer - sum of ages for male keys
 
+# map - transform to array of ages or 0s. Then sum
+# reduce - sum if meets criteria
 
+total_male_age = 0
+total_male_age = munsters.map do |person, details|
+                  if details['gender'] == 'male'
+                    details['age']
+                  else
+                    0
+                  end
+                end.sum
+p total_male_age
+# 444
 
+total_male_age = 0
+total_male_age = munsters.reduce(0) do |sum, (person, details)|
+  if details['gender'] == 'male'
+    sum + details['age']
+  else
+    sum
+  end
+end
+p total_male_age
+# 444
 
+total_male_age = 0
+munsters.each_value do |details|
+  total_male_age += details['age'] if details['gender'] == 'male'
+end
+p total_male_age
+# 444
 
+# puts '---6---'
 
 # 6.
 
@@ -124,6 +165,17 @@ munsters = {
 
 # (Name) is a (age)-year-old (male or female).
 
+munsters.each do |person, details|
+  puts "#{person} is a #{details['age']}-year-old #{details['gender']}."
+end
+# Herman is a 32-year-old male.
+# Lily is a 30-year-old female.
+# Grandpa is a 402-year-old male.
+# Eddie is a 10-year-old male.
+# Marilyn is a 23-year-old female.
+
+
+puts '---7---'
 
 # 7.
 
@@ -133,16 +185,56 @@ a = 2
 b = [5, 8]
 arr = [a, b]
 
-arr[0] += 2
+arr[0] += 2       # arr[0] = arr[0] + 2
 arr[1][0] -= a
+# a   => 2
+# b   => [3, 8]
+# arr => [4, [3, 8]]
 
+# The local variable `a` is initialized and assigned to the integer `2`.
+# The local variable `b` is initialized and assigned to an array containing the integers, `5` and `8` as elements
+# The local variable `arr` is initialized and assigned to an array containing the local variables `a` and `b` as elements. `arr` will be [2, [5, 8]] with each element referencing the same object as local variables `a` and `b`.
+# On line `5`, Ruby's syntatic sugar is used to reference an element in an array, increment that value and reassign that element to the new value. This is the same as the `Array#[]` method being invoked on `arr` with the integer `0` passed in as an argument. This references the element at index 0 and returns the integer `2`, which is the same object referenced by `a`.
+# The `Integer#+` method is then called on `2` with the integer `2` passed in as an argument. This returns the integer `4`.
+# The `Array#[]=` method is then invoked on `arr` with the integer `4` passed in as an argument. This reassigns the element at index 0 to `4`.
+# `arr` is now equal to `[4, [5, 8]]`. The element at index 0 is now referencing a different object than the local variable `a`.
+
+# On line 6, element reference syntatic sugar is again used to return the element at index 0 from the array at index 1 in `arr`. This returns the integer `5`. The syntatic sugar `-=` is called to decrement `5` by the value of `a` (`2`) and re-assign this value to the element at index 0 of the array at index 1 in `arr`. This returns the integer `3` and `arr` is now `[4, [3, 8]]`.
+# Line 6 destructively mutated the array at index 1 in `arr`. This is the same object that `b` references, so `b` is also now pointing to the array object `[3, 8]`, while `a` is unmodified with the value `2`.
+
+
+puts '---8---'
 
 # 8.
 
 # Using the each method, write some code to output all of the vowels from the strings.
 
+VOWELS = %w(a e i o u)
+
 hsh = {first: ['the', 'quick'], second: ['brown', 'fox'], third: ['jumped'], fourth: ['over', 'the', 'lazy', 'dog']}
 
+hsh.each do |_, array|
+  array.each do |string|
+    string.chars.each do |char|
+      puts char if VOWELS.include?(char.downcase)
+    end
+  end
+end
+# e
+# u
+# i
+# o
+# o
+# u
+# e
+# o
+# e
+# e
+# a
+# o
+
+
+puts '---9---'
 
 # 9.
 
@@ -150,13 +242,51 @@ hsh = {first: ['the', 'quick'], second: ['brown', 'fox'], third: ['jumped'], fou
 
 arr = [['b', 'c', 'a'], [2, 1, 3], ['blue', 'black', 'green']]
 
+sorted = arr.map do |sub_array|
+  sub_array.sort do |a, b|
+    b <=> a
+  end
+end
+p sorted
+# => [["c", "b", "a"], [3, 2, 1], ["green", "blue", "black"]]
+
+
+puts '---10---'
 
 # 10.
 
 # Given the following data structure and without modifying the original array, use the map method to return a new array identical in structure to the original but where the value of each integer is incremented by 1.
 
-[{a: 1}, {b: 2, c: 3}, {d: 4, e: 5, f: 6}]
+array = [{a: 1}, {b: 2, c: 3}, {d: 4, e: 5, f: 6}]
 
+incremented = array.map do |hash|
+  hash.map do |k, v|
+    [k, v += 1]
+  end.to_h
+end
+p incremented
+
+incremented = array.map do |hash|
+  new = {}
+  hash.each do |k, v|
+    new[k] = v + 1
+  end
+  new
+end
+p incremented
+
+incremented = []
+array.each_with_object(incremented) do |hash, obj|
+                                      new = {}
+                                      hash.each do |k, v|
+                                        new[k] = v + 1
+                                      end
+                                      obj << new
+                                    end
+p incremented
+
+
+puts '---11---'
 
 # 11.
 
@@ -164,6 +294,11 @@ arr = [['b', 'c', 'a'], [2, 1, 3], ['blue', 'black', 'green']]
 
 arr = [[2], [3, 5, 7], [9], [11, 13, 15]]
 
+
+
+
+
+puts '---12---'
 
 # 12.
 
@@ -173,6 +308,8 @@ arr = [[:a, 1], ['b', 'two'], ['sea', {c: 3}], [{a: 1, b: 2, c: 3, d: 4}, 'D']]
 
 # expected return value: {:a=>1, "b"=>"two", "sea"=>{:c=>3}, {:a=>1, :b=>2, :c=>3, :d=>4}=>"D"}
 
+
+puts '---13---'
 
 # 13.
 
@@ -184,6 +321,8 @@ arr = [[1, 6, 7], [1, 4, 9], [1, 8, 3]]
 
 [[1, 8, 3], [1, 6, 7], [1, 4, 9]]
 
+
+puts '---14---'
 
 # 14.
 
@@ -201,6 +340,8 @@ hsh = {
 
 [["Red", "Green"], "MEDIUM", ["Red", "Green"], ["Orange"], "LARGE"]
 
+
+puts '---15---'
 
 # 15.
 
