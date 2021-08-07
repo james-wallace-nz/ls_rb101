@@ -226,3 +226,45 @@ result =  [
 p result
 # => [[[2, 3], [4, 5]], [6, 7]]
 
+
+puts '----'
+
+# What not to do - mutating collection during iteration
+
+def remove_evens!(arr)
+  arr.each_with_index do |num, idx|
+    p [idx, num]
+    if num % 2 == 0
+      arr.delete(num)
+    end
+  end
+  arr
+end
+
+p remove_evens!([1, 1, 2, 3, 4, 6, 8, 9])
+
+# 0, 1 => false => [1, 1, 2, 3, 4, 6, 8, 9]
+# 1, 1 => false => [1, 1, 2, 3, 4, 6, 8, 9]
+# 2, 2 => true  => [1, 1, 3, 4, 6, 8, 9]
+# 3, 4 => true  => [1, 1, 3, 6, 8, 9]
+# 4, 8 => true  => [1, 1, 3, 6, 9]
+# => [1, 1, 3, 6, 9]
+
+puts '----'
+
+# Clone array and iterate on that while mutating original
+
+def remove_evens_fixed!(arr)
+  cloned_arr = arr.clone
+  cloned_arr.each_with_index do |num, idx|
+    p [idx, num]
+    if num % 2 == 0
+      arr.delete(num)
+    end
+  end
+  arr
+end
+
+
+p remove_evens_fixed!([1, 1, 2, 3, 4, 6, 8, 9])
+# => [1, 1, 3, 9]
