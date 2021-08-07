@@ -294,8 +294,22 @@ puts '---11---'
 
 arr = [[2], [3, 5, 7], [9], [11, 13, 15]]
 
+multiples = arr.map do |sub_array|
+                      sub_array.select do |el|
+                        el % 3 == 0
+                      end
+                    end
+p multiples
 
+# input: [[2], [3, 5, 7], [9], [11, 13, 15]]
+# output:  [[], [3], [9], [15]]
 
+multiples = arr.map do |sub_array|
+                      sub_array.reject do |el|
+                        el % 3 != 0
+                      end
+                    end
+p multiples
 
 
 puts '---12---'
@@ -308,6 +322,13 @@ arr = [[:a, 1], ['b', 'two'], ['sea', {c: 3}], [{a: 1, b: 2, c: 3, d: 4}, 'D']]
 
 # expected return value: {:a=>1, "b"=>"two", "sea"=>{:c=>3}, {:a=>1, :b=>2, :c=>3, :d=>4}=>"D"}
 
+new_hash = {}
+arr.each_with_object(new_hash) do |sub_array, hash|
+  hash[sub_array[0]] = sub_array[1]
+end
+p new_hash
+# => {:a=>1, "b"=>"two", "sea"=>{:c=>3}, {:a=>1, :b=>2, :c=>3, :d=>4}=>"D"}
+
 
 puts '---13---'
 
@@ -319,7 +340,20 @@ arr = [[1, 6, 7], [1, 4, 9], [1, 8, 3]]
 
 # The sorted array should look like this:
 
-[[1, 8, 3], [1, 6, 7], [1, 4, 9]]
+# [[1, 8, 3], [1, 6, 7], [1, 4, 9]]
+
+# algo:
+# sort the following modified array => [[1, 7], [1, 9], [1, 3]]
+
+# select = return only elements that meet criteria
+# sort_by = return new array sorted by criteria in block
+
+sorted = arr.sort_by do |sub_array|
+                       sub_array.select do |int|
+                         int.odd?
+                      end
+                     end
+p sorted
 
 
 puts '---14---'
@@ -336,9 +370,27 @@ hsh = {
   'marrow' => {type: 'vegetable', colors: ['green'], size: 'large'},
 }
 
+# input: hsh
+# output: array containing colours of fruits (capitalized) and sizes of vegetables (uppercase)
+
 # The return value should look like this:
 
-[["Red", "Green"], "MEDIUM", ["Red", "Green"], ["Orange"], "LARGE"]
+# [["Red", "Green"], "MEDIUM", ["Red", "Green"], ["Orange"], "LARGE"]
+
+# if :type == 'fruit' => :colors.capitalize
+# else :size.upcase
+
+colors_and_sizes = hsh.map do |_, details|
+                             if details[:type] == 'fruit'
+                               details[:colors].map do |color|
+                                 color.capitalize
+                               end
+                             else
+                               details[:size].upcase
+                             end
+                           end
+p colors_and_sizes
+# => [["Red", "Green"], "MEDIUM", ["Red", "Green"], ["Orange"], "LARGE"]
 
 
 puts '---15---'
@@ -347,8 +399,24 @@ puts '---15---'
 
 # Given this data structure write some code to return an array which contains only the hashes where all the integers are even.
 
-arr = [{a: [1, 2, 3]}, {b: [2, 4, 6], c: [3, 6], d: [4]}, {e: [8], f: [6, 10]}]
+arr = [
+        {a: [1, 2, 3]},
+        {b: [2, 4, 6], c: [3, 6], d: [4]},
+        {e: [8], f: [6, 10]}
+      ]
 
+evens = arr.select do |hash|
+  hash.all? do |_, array|
+    array.all? do |int|
+      int.even?
+    end
+  end
+end
+p evens
+# => [{e: [8], f: [6, 10]}]
+
+
+puts '---16---'
 
 # 16.
 
@@ -362,3 +430,29 @@ arr = [{a: [1, 2, 3]}, {b: [2, 4, 6], c: [3, 6], d: [4]}, {e: [8], f: [6, 10]}]
 
 # Write a method that returns one UUID when called with no parameters.
 
+# input: method call
+# output: string containing 8, 4, 4, 4, 12 hexadecimial characters separated by -
+
+# algo:
+# hexadecimal is 0-9 and A-F
+# Create HEXA constant
+# Iterate through uuid sub-array elements
+# For each element, iterate int number of times based on digits array integer for same index
+# For each iteration, randomly select a value from HEXA constant. Add this to the value in the uuid sub-array
+# => ["f65c57f6", "a6aa", "17a8", "faa1", "a67f2dc9fa91"]
+# Join uuid elements with "-" and return as last expression
+
+HEXA = ('0'..'9').to_a + ('A'..'F').to_a
+
+def generate_uuid
+  uuid = ['', '', '', '', '']
+  digits = [8, 4, 4, 4, 12]
+
+  uuid.each_with_index do |sub_str, index|
+    digits[index].times do
+      sub_str << HEXA.sample
+    end
+  end
+  uuid.join('-')
+end
+p generate_uuid
