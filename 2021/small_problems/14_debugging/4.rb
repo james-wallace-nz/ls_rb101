@@ -6,7 +6,7 @@ def reverse_sentence(sentence)
 
   i = 0
   while i < words.length
-    reversed_words = words[i] + reversed_words
+    reversed_words = [words[i]] + reversed_words
     i += 1
   end
 
@@ -15,4 +15,3 @@ end
 
 p reverse_sentence('how are you doing')
 # expected output: 'doing you are how'
-
