@@ -25,7 +25,7 @@ def idf(term, documents)
   number_of_documents = documents.length
   number_of_documents_with_term = documents.count { |d| tf(term, d) > 0 }
 
-  Math.log(number_of_documents / number_of_documents_with_term)
+  Math.log(number_of_documents / number_of_documents_with_term.to_f)
 end
 
 # Very simple example
@@ -70,3 +70,5 @@ puts tfidf("mastery", document3, documents) # ~ 3.3
 puts tfidf("some", document1, documents) # 0
 puts tfidf("some", document2, documents) # ~ 0.4
 puts tfidf("some", document3, documents) # ~ 0.4
+
+# number_of_documents / number_of_documents_with_term is integer division. Need to convert to float to decimal results
