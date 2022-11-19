@@ -1,0 +1,59 @@
+languages:
+  eng: 'English'
+  ita: 'Italian'
+
+eng:
+  welcome: "Welcome to Calculator! Enter your name:"
+  valid_name: "Make sure to use a valid name."
+  welcome_name: "Hi "
+
+  first_number: 'What is your first number?'
+  second_number: 'What is your second number?'
+  invalid_number: 'Invalid number?'
+
+  operator_prompt: "What is your operation
+        \n 1) add
+        \n 2) subtract
+        \n 3) multiply
+        \n 4) divide?"
+
+  adding: 'Adding'
+  subtracting: 'Subtracting'
+  multiplying: 'Multiplying'
+  dividing: 'Dividing'
+
+  invalid_operator: 'Must choose 1, 2, 3, 4'
+  calculating: " the two numbers...."
+  result: "The result is "
+
+  repeat: "Do you want to perform another calculation? (Y to calculate again)"
+
+  goodbye: "Goodbye"
+
+ita:
+  welcome: "Benvenuto in Calcolatrice! Inserisci il tuo nome:"
+  valid_name: "Assicurati di utilizzare un nome valido."
+  welcome_name: "Ciao "
+
+  first_number: 'Qual è il tuo primo numero?'
+  second_number: 'Qual è il tuo secondo numero?'
+  invalid_number: 'Numero non valido?'
+
+  operator_prompt: "Qual è la tua operazione
+         \n 1) aggiungere
+         \n 2) sottrarre
+         \n 3) moltiplicare
+         \n 4) dividere"
+
+  adding: 'Aggiunta'
+  subtracting: 'Sottrazione'
+  multiplying: 'Moltiplicando'
+  dividing: 'Divisione'
+
+  invalid_operator: 'Deve scegliere 1, 2, 3, 4'
+  calculating: " i due numeri..."
+  result: "Il risultato è "
+
+  repeat: "Vuoi eseguire un altro calcolo? (Y per calcolare di nuovo)"
+
+  goodbye: "addio"
